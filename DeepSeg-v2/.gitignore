@@ -1,0 +1,13 @@
+DATASET/
+evaluations
+logs
+logs_tensor_board
+paper_weights
+preds
+weights
+__pycache__
+venv/
+.idea/DeepSeg-v2.iml
+.idea/DeepSeg-v2.iml
+sample_brats19_folders
+pip
