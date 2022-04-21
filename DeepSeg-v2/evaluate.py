@@ -33,14 +33,14 @@ matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 def get_truth_images(truth_dir='truth/', truth_shape=(3445,224,224)):
-    truth_imgs = np.zeros(truth_shape)
+    truth_imgs = np.zeros(truth_shape,dtype='uint8')
     for i , img in enumerate(tqdm(glob.glob(os.path.join(truth_dir,"*.png")))):
         image = imread(img, 0)
         truth_imgs[i,] = resize(image, (224, 224), interpolation = INTER_NEAREST)
     return truth_imgs
 
 def get_prediction_images(pred_dir='preds/', preds_shape=(3445,240,240)):
-    pred_imgs = np.zeros(preds_shape)
+    pred_imgs = np.zeros(preds_shape,dtype='uint8')
     for i , img in enumerate(tqdm(glob.glob(os.path.join(pred_dir,"*.png")))):
         pred_imgs[i,] = imread(img, 0)
     return pred_imgs

@@ -20,11 +20,29 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+#|<------------Dependencies---------->|
+# python 3.7
+# keras 2.6.0
+# keras-Applications 1.0.8
+# keras-Preprocessing 1.1.2
+# tensorflow 2.6.0
+# tensorflow-gpu 2.6.0
+# tensorflow-gpu-estimator 2.3.0
+# tensorflow-estimator 2.6.0
+# h5py 3.1.0
+# imgaug 0.4.0
+# opencv-python 4.5.3.56
+# numpy 1.18.5
+# nipype 1.6.1
+# nibabel 3.2.1
+# CUDA 11.2
+# cuDNN 8.1
+
 import numpy as np
 import glob, os
 import itertools
 import random
-from keras.optimizers import Adam
+from keras.optimizers import adam_v2
 from keras import backend as K
 
 K.set_image_data_format('channels_last')
@@ -82,7 +100,7 @@ config['batch_size'] = 16
 config['val_batch_size'] = 16
 config['filter_size'] = 32 # number of basic filters
 config['optimizer_lr'] = 1e-4
-config['optimizer_name'] = Adam(config['optimizer_lr'])
+config['optimizer_name'] = adam_v2.Adam(config['optimizer_lr'])
 config['weights_arr'] = np.array([0.05, 1.0]) # 2 Classes
 #####################################################################
 
@@ -93,21 +111,21 @@ config['output_height'] = 224
 config['output_width'] = 224
 config['epochs'] = 30	# number of training epochs
 config['load_model'] = True # for training --> False ||| For Predictions --> True
-# config['load_model_path'] = path+"weights/"+config['project_name']+'/'+config['encoder_name']+"_"+config['decoder_name']+".030-0.00.hdf5" # specifiy the loaded model path or None |||  if config['load_model']==False None; else pathofWeight
-config['load_model_path'] = None
+config['load_model_path'] = path+"weights/"+config['project_name']+'/'+config['encoder_name']+"_"+config['decoder_name']+"_e30s45v200.hdf5" # specifiy the loaded model path or None |||  if config['load_model']==False None; else pathofWeight
+# config['load_model_path'] = None
 
 config['model_num'] = '30' # load model by the number of training epoch if config['load_model_path'] = None
 config['initial_epoch'] = config['model_num'] if config['load_model'] else 0  # continue training
 config['trainable'] = True # make the top layers of the model trainable or not (for transfer learning)
 
-# config['n_train_images'] = len(glob.glob(config['train_images'] + 'image_FLAIR/*')) # 13779
+config['n_train_images'] = len(glob.glob(config['train_images'] + 'image_FLAIR/*')) # 13779
 config['n_valid_images'] = len(glob.glob(config['val_images'] + 'image_FLAIR/*')) # 3445
 #
 # config['steps_per_epoch'] = config['n_train_images'] // config['batch_size'] # 512 for fast testing
 # config['validation_steps'] = config['n_valid_images'] // config['val_batch_size'] # 200 for fast testing
 
-config['steps_per_epoch'] = 64
-config['validation_steps'] = 100
+config['steps_per_epoch'] = 45
+config['validation_steps'] = 200
 
 # data augmentation parameters
 config['do_augment'] = True
@@ -129,7 +147,7 @@ config['pred_path'] = path+'preds/' + config['project_name'] + '/'
 config['evaluate_path'] = path+'evaluations/' # + config['project_name'] + '/'
 config['evaluate_val'] = True # evaluate the entire validation set
 config['evaluate_val_nifti'] = False # evaluate the validation set as nifti images
-config['evaluate_keras'] = False # evaluate using keras evaluate_generator()
+config['evaluate_keras'] = True # evaluate using keras evaluate_generator()
 config['save_csv'] = True # save the evaluations as .csv file
 config['save_plot'] = True # save the evaluations plot
 config['predict_val'] = True # predict the entire validation set
@@ -167,15 +185,32 @@ print("Training batch size:", config['batch_size'])
 print("Validation batch size:", config['val_batch_size'])
 print("####################################################################\n\n")
 
+#<-----FOR TENSORFLOW v1------>
+
+# # limit the GPU usage
+# import tensorflow as tf
+# from keras.backend.tensorflow_backend import set_session
+#
+# gpu_id = 0 # for multi-gpu environment
+# os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
+# gpu_config = tf.ConfigProto(allow_soft_placement=True)
+# gpu_config.gpu_options.allow_growth = True
+# set_session(tf.Session(config=gpu_config))
+# print(tf.test.is_gpu_available())
+# print(tf.test.gpu_device_name())
+
+
+#<-----FOR TENSORFLOW v2------>
 
 # limit the GPU usage
 import tensorflow as tf
-from keras.backend.tensorflow_backend import set_session
+tf.config.run_functions_eagerly(True)
 
 gpu_id = 0 # for multi-gpu environment
 os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
-gpu_config = tf.ConfigProto(allow_soft_placement=True)
+gpu_config = tf.compat.v1.ConfigProto(log_device_placement=True)
 gpu_config.gpu_options.allow_growth = True
-set_session(tf.Session(config=gpu_config))
+K.set_session(tf.compat.v1.Session())
 print(tf.test.is_gpu_available())
 print(tf.test.gpu_device_name())
+print(tf.config.list_physical_devices('GPU'))

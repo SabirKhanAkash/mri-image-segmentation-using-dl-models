@@ -58,7 +58,7 @@ def predict(model, inp, out_fname):
 
     if not out_fname is None:
         imwrite(out_fname, pr)
-        print("I'm Here")
+        #print("I'm Here")
     return pr
 
 def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None, checkpoints_path=None, train_modalities=config['train_modality'], overwrite=True):
@@ -100,14 +100,14 @@ def main(sample_output=True, predict_val=True, predict_val_nifti=False):
             load_model=config['load_model'])
 
     # get predictions of all images in the validation directory
-    # if predict_val:
-    #     predict_multiple(
-    #         unet_2d_model,
-    #         inp_dir = config['val_images']+config['train_modality'][0],
-    #         out_dir = config['pred_path'],
-    #         train_modalities = config['train_modality'],
-    #         overwrite = False
-    #     )
+    if predict_val:
+        predict_multiple(
+            unet_2d_model,
+            inp_dir = config['val_images']+config['train_modality'][0],
+            out_dir = config['pred_path'],
+            train_modalities = config['train_modality'],
+            overwrite = False
+        )
 
     # get predictions of all images in the validation directory as nifti
     if predict_val_nifti:
@@ -159,8 +159,8 @@ def main(sample_output=True, predict_val=True, predict_val_nifti=False):
         # sample_lgg_path = 'BraTS19_TCIA09_462_1-70' # LGG 2019 default
         # sample_hgg_path = 'BraTS19_TCIA10_408_1-50' # HGG 2019 default
 
+        sample_hgg_path = 'BraTS19_CBICA_BAP_1-96'  # HGG 2019
         sample_lgg_path = 'BraTS19_TCIA09_462_1-75' # LGG 2019
-        sample_hgg_path = 'BraTS19_TCIA08_436_1-72' # HGG 2019
 
         # sample_lgg_path = 'Brats18_TCIA09_462_1-99'  # LGG 2018
         # sample_hgg_path = 'Brats18_TCIA08_436_1-76'  # HGG 2018

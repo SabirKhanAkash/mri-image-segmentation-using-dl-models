@@ -24,8 +24,6 @@ from config import *
 from keras_applications import correct_pad
 from keras.layers import *
 from keras.models import *
-from keras.optimizers import Adam
-from keras.utils import get_file
 from keras import backend as K
 
 K.set_image_data_format('channels_last')
@@ -522,7 +520,7 @@ def get_vgg16_encoder(input_height=224, input_width=224, depth=3, filter_size = 
     x = MaxPooling2D((2, 2), strides=(2, 2), name='block5_pool', data_format=IMAGE_ORDERING)(x)
     
     if pretrained == 'imagenet':
-        VGG_Weights_path = get_file(pretrained_url.split("/")[-1], pretrained_url)
+        VGG_Weights_path = tf.keras.utils.get_file(pretrained_url.split("/")[-1], pretrained_url)
         Model(img_input, x).load_weights(VGG_Weights_path)
     return img_input, [f1, f2, f3, f4, f5]
 
@@ -575,7 +573,7 @@ def get_resnet50_encoder(input_height=224, input_width=224, depth=3, filter_size
     # f6 = x 
     
     if pretrained == 'imagenet':
-        weights_path = get_file(pretrained_url.split("/")[-1], pretrained_url)
+        weights_path = tf.keras.utils.get_file(pretrained_url.split("/")[-1], pretrained_url)
         Model(img_input, x).load_weights(weights_path)
     return img_input, [f1, f2, f3, f4, f5]
 
@@ -616,7 +614,7 @@ def get_mobilenet_encoder(input_height=224, input_width=224, depth=3, filter_siz
         model_name = 'mobilenet_%s_%d_tf_no_top.h5' % ('1_0', 224)
         BASE_WEIGHT_PATH = ('https://github.com/fchollet/deep-learning-models/releases/download/v0.6/')
         weight_path = BASE_WEIGHT_PATH + model_name
-        weights_path = get_file(model_name, weight_path)
+        weights_path = tf.keras.utils.get_file(model_name, weight_path)
         Model(img_input, x).load_weights(weights_path)
 
     return img_input, [f1, f2, f3, f4, f5 ]
@@ -723,7 +721,7 @@ def get_xception_encoder(input_height=224, input_width=224, depth=3, filter_size
         x = GlobalMaxPooling2D()(x)
 
     if pretrained == 'imagenet':
-        weights_path = get_file(pretrained_url.split("/")[-1], pretrained_url)
+        weights_path = tf.keras.utils.get_file(pretrained_url.split("/")[-1], pretrained_url)
         Model(img_input, x).load_weights(weights_path)
     return img_input, [f1, f2, f3, f4, f5]
 
@@ -784,9 +782,9 @@ def get_nasnet_encoder(input_height=224, input_width=224, depth=3, filter_size =
         NASNET_MOBILE_WEIGHT_PATH_NO_TOP = BASE_WEIGHTS_PATH + 'NASNet-mobile-no-top.h5'
         NASNET_LARGE_WEIGHT_PATH_NO_TOP = BASE_WEIGHTS_PATH + 'NASNet-large-no-top.h5'
         if encoder_name=='NASNetMobile':
-            weights_path = get_file('nasnet_mobile_no_top.h5', NASNET_MOBILE_WEIGHT_PATH_NO_TOP)
+            weights_path = tf.keras.utils.get_file('nasnet_mobile_no_top.h5', NASNET_MOBILE_WEIGHT_PATH_NO_TOP)
         elif encoder_name=='NASNetLarge':
-            weights_path = get_file('nasnet_large_no_top.h5', NASNET_LARGE_WEIGHT_PATH_NO_TOP)
+            weights_path = tf.keras.utils.get_file('nasnet_large_no_top.h5', NASNET_LARGE_WEIGHT_PATH_NO_TOP)
         
         Model(img_input, x).load_weights(weights_path)
     return img_input, [f1, f2, f3, f4, f5]
@@ -859,7 +857,7 @@ def get_mobilenetv2_encoder(input_height=224, input_width=224, depth=3, filter_s
         model_name = ('mobilenet_v2_weights_tf_dim_ordering_tf_kernels_' + str(alpha) + '_' + str(rows) + '_no_top' + '.h5')
         BASE_WEIGHT_PATH = ('https://github.com/JonathanCMitchell/mobilenet_v2_keras/releases/download/v1.1/')
         weight_path = BASE_WEIGHT_PATH + model_name
-        weights_path = get_file(model_name, weight_path, cache_subdir='models')
+        weights_path = tf.keras.utils.get_file(model_name, weight_path, cache_subdir='models')
   
         Model(img_input, x).load_weights(weights_path)
     return img_input, [f1, f2, f3, f4, f5 ]
@@ -915,11 +913,11 @@ def get_densenet121_encoder(input_height=224, input_width=224, depth=3, filter_s
         DENSENET201_WEIGHT_PATH_NO_TOP = (BASE_WEIGTHS_PATH + 'densenet201_weights_tf_dim_ordering_tf_kernels_notop.h5')
  
         if blocks == [6, 12, 24, 16]:
-            weights_path = get_file('densenet121_weights_tf_dim_ordering_tf_kernels_notop.h5', DENSENET121_WEIGHT_PATH_NO_TOP)
+            weights_path = tf.keras.utils.get_file('densenet121_weights_tf_dim_ordering_tf_kernels_notop.h5', DENSENET121_WEIGHT_PATH_NO_TOP)
         elif blocks == [6, 12, 32, 32]:
-            weights_path = get_file('densenet169_weights_tf_dim_ordering_tf_kernels_notop.h5', DENSENET169_WEIGHT_PATH_NO_TOP)
+            weights_path = tf.keras.utils.get_file('densenet169_weights_tf_dim_ordering_tf_kernels_notop.h5', DENSENET169_WEIGHT_PATH_NO_TOP)
         elif blocks == [6, 12, 48, 32]:
-            weights_path = get_file('densenet201_weights_tf_dim_ordering_tf_kernels_notop.h5', DENSENET201_WEIGHT_PATH_NO_TOP)
+            weights_path = tf.keras.utils.get_file('densenet201_weights_tf_dim_ordering_tf_kernels_notop.h5', DENSENET201_WEIGHT_PATH_NO_TOP)
         Model(img_input, x).load_weights(weights_path)
 
     return img_input, [f1, f2, f3, f4, f5 ]
