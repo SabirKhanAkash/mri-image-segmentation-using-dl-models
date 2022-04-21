@@ -37,7 +37,7 @@ if K.image_data_format() == 'channels_first':
 elif K.image_data_format() == 'channels_last':
     IMAGE_ORDERING = 'channels_last'
 
-def predict(model=None, inp=None, out_fname=None):
+def predict(model, inp, out_fname):
     output_width = model.output_width
     output_height  = model.output_height
     input_width = model.input_width
@@ -54,36 +54,38 @@ def predict(model=None, inp=None, out_fname=None):
     pr = pr.reshape((output_height,  output_width, n_classes)).argmax(axis=2) # (224, 224)
 
     # change the predicted label 3 back to value of 4 (standard BraTS labels)
-    pr[pr==3] = 4
+    #pr[pr==3] = 4
 
     if not out_fname is None:
         imwrite(out_fname, pr)
+        print("I'm Here")
     return pr
 
-def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None, checkpoints_path=None, train_modalities=config['train_modality'], overwrite=False):
+def predict_multiple(model=None, inps=None, inp_dir=None, out_dir=None, checkpoints_path=None, train_modalities=config['train_modality'], overwrite=True):
     if inps is None and (not inp_dir is None):
         inps = glob.glob(os.path.join(inp_dir,"*.png"))
 
     assert type(inps) is list
     all_prs = []
     for i, inp in enumerate(tqdm(inps)):
-        if out_dir is None:
-            out_fname = None
-        else:
-            if isinstance(inp, six.string_types)  :
-                out_fname = os.path.join(out_dir, os.path.basename(inp))
-            else :
-                out_fname = os.path.join(out_dir, str(i)+ ".jpg")
-
-        if not os.path.exists(out_fname):
-            pr = predict(model, inp,out_fname)
-            all_prs.append(pr)
-        elif overwrite:
-            pr = predict(model, inp,out_fname)
-            all_prs.append(pr)
+        # if out_dir is None:
+        #     out_fname = None
+        # else:
+        #     if isinstance(inp, six.string_types)  :
+        #         out_fname = os.path.join(out_dir, os.path.basename(inp))
+        #     else :
+        #         out_fname = os.path.join(out_dir, str(i)+ ".jpg")
+        #
+        # if not os.path.exists(out_fname):
+        #     pr = predict(model, inp,out_fname)
+        #     all_prs.append(pr)
+        # elif overwrite:
+        out_fname = os.path.join(out_dir, os.path.basename(inp))
+        pr = predict(model, inp,out_fname)
+        all_prs.append(pr)
     return all_prs
 
-def main(sample_output=False, predict_val=True, predict_val_nifti=False):
+def main(sample_output=True, predict_val=True, predict_val_nifti=False):
     # create the DeepSeg model
     unet_2d_model = get_deepseg_model(
             encoder_name=config['encoder_name'], 
@@ -98,14 +100,14 @@ def main(sample_output=False, predict_val=True, predict_val_nifti=False):
             load_model=config['load_model'])
 
     # get predictions of all images in the validation directory
-    if predict_val:
-        predict_multiple(
-            unet_2d_model,
-            inp_dir = config['val_images']+config['train_modality'][0], 
-            out_dir = config['pred_path'],
-            train_modalities = config['train_modality'],
-            overwrite = False
-        )
+    # if predict_val:
+    #     predict_multiple(
+    #         unet_2d_model,
+    #         inp_dir = config['val_images']+config['train_modality'][0],
+    #         out_dir = config['pred_path'],
+    #         train_modalities = config['train_modality'],
+    #         overwrite = False
+    #     )
 
     # get predictions of all images in the validation directory as nifti
     if predict_val_nifti:
@@ -154,44 +156,58 @@ def main(sample_output=False, predict_val=True, predict_val_nifti=False):
     # sample output
     if sample_output:
         # BRATS 2019
-        sample_lgg_path = 'BraTS19_TCIA09_462_1-70' # LGG
-        sample_hgg_path = 'BraTS19_TCIA10_408_1-50' # HGG
+        # sample_lgg_path = 'BraTS19_TCIA09_462_1-70' # LGG 2019 default
+        # sample_hgg_path = 'BraTS19_TCIA10_408_1-50' # HGG 2019 default
+
+        sample_lgg_path = 'BraTS19_TCIA09_462_1-75' # LGG 2019
+        sample_hgg_path = 'BraTS19_TCIA08_436_1-72' # HGG 2019
+
+        # sample_lgg_path = 'Brats18_TCIA09_462_1-99'  # LGG 2018
+        # sample_hgg_path = 'Brats18_TCIA08_436_1-76'  # HGG 2018
+
+
+
         orig_lgg_path = config['val_images']+config['train_modality'][0]+ sample_lgg_path +'.png' # FLAIR image
         orig_hgg_path = config['val_images']+config['train_modality'][0]+ sample_hgg_path +'.png' # FLAIR image
         truth_lgg_path = config['val_annotations']+ sample_lgg_path+'.png'
         truth_hgg_path = config['val_annotations']+ sample_hgg_path+'.png'
-        pred_lgg_img = predict(unet_2d_model, inp= orig_lgg_path)
-        pred_hgg_img = predict(unet_2d_model, inp= orig_hgg_path)
+        # pred_lgg_img = predict(unet_2d_model, inp= orig_lgg_path)
+        # pred_hgg_img = predict(unet_2d_model, inp= orig_hgg_path)
+
+        pred_path_lgg = "out_test_file/"+sample_lgg_path+"_pred.png"
+        pred_path_hgg = "out_test_file/"+sample_hgg_path+"_pred.png"
+        pred_lgg_img = predict(unet_2d_model, inp= orig_lgg_path, out_fname=pred_path_lgg)
+        pred_hgg_img = predict(unet_2d_model, inp= orig_hgg_path, out_fname=pred_path_hgg)
 
         # load as grayscale images
         orig_hgg_img = imread(orig_hgg_path, 0)
         orig_lgg_img = imread(orig_lgg_path, 0)
         truth_hgg_img = imread(truth_hgg_path, 0)
-        truth_hgg_img = resize(truth_hgg_img, (224, 224), INTER_NEAREST)
+        # truth_hgg_img = resize(truth_hgg_img, (224, 224), INTER_NEAREST)
         truth_lgg_img = imread(truth_lgg_path, 0)
-        truth_lgg_img = resize(truth_lgg_img, (224, 224), INTER_NEAREST)
+        # truth_lgg_img = resize(truth_lgg_img, (224, 224), INTER_NEAREST)
 
         f = plt.figure()
         # (nrows, ncols, index)
         f.add_subplot(2,3, 1)
         plt.title('Original HGG image')
-        plt.imshow(orig_hgg_img, cmap='gray')
+        plt.imshow(orig_hgg_img, cmap='Reds')
         f.add_subplot(2,3, 2)
         plt.title('Predicted HGG image')
-        plt.imshow(pred_hgg_img)
+        plt.imshow(pred_hgg_img, cmap='Reds')
         f.add_subplot(2,3, 3)
         plt.title('Truth HGG image')
-        plt.imshow(truth_hgg_img)
+        plt.imshow(truth_hgg_img, cmap='Reds')
 
         f.add_subplot(2,3, 4)
         plt.title('Original LGG image')
-        plt.imshow(orig_lgg_img, cmap='gray')
+        plt.imshow(orig_lgg_img, cmap='Reds')
         f.add_subplot(2,3, 5)
         plt.title('Predicted LGG image')
-        plt.imshow(pred_lgg_img)
+        plt.imshow(pred_lgg_img, cmap='Reds')
         f.add_subplot(2,3, 6)
         plt.title('Truth LGG image')
-        plt.imshow(truth_lgg_img)
+        plt.imshow(truth_lgg_img, cmap='Reds')
         plt.show(block=True)
 
 if __name__ == "__main__":

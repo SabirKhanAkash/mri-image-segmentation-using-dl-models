@@ -29,7 +29,7 @@ from keras.callbacks import ModelCheckpoint, CSVLogger, EarlyStopping, TensorBoa
 def train_deepseg_model(model, train_images, train_annotations, input_height=224, 
         input_width=224, output_height=224, output_width=224, classes=None, n_classes=None, 
         n_modalities=1, verify_dataset=True, epochs = 35, initial_epoch = 0, batch_size = 16, 
-        validate=True, val_images=None, val_annotations=None, val_batch_size=16,
+        validate=False, val_images=None, val_annotations=None, val_batch_size=16, 
         steps_per_epoch=512, validation_steps=200, do_augment=False):
 
     # if verify_dataset:
@@ -42,7 +42,8 @@ def train_deepseg_model(model, train_images, train_annotations, input_height=224
     train_gen = image_segmentation_generator(train_images, train_annotations,  batch_size, classes, input_height, input_width, output_height, output_width, do_augment)
 
     # callback functions
-    model_checkpoint = ModelCheckpoint(config['model_checkpoints']+".{epoch:03d}-{val_dice_argmax:.2f}.hdf5", monitor='val_dice_argmax', save_best_only=False, save_weights_only=True)
+    model_checkpoint = ModelCheckpoint(config['model_checkpoints']+".{epoch:03d}-{dice_argmax:.2f}.hdf5", monitor='dice_argmax', save_best_only=False, save_weights_only=True)
+    #model_checkpoint = ModelCheckpoint(config['model_checkpoints'] + ".hdf5", monitor='dice_argmax', save_best_only=False, save_weights_only=True)
     csv_logger = CSVLogger(os.path.join(config['log_dir'], config['project_name'] + '.txt'), separator=',', append=True)
     tensor_board = TensorBoard(config['tensorboard_path'])
     #model_earlystopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=2, mode='auto')

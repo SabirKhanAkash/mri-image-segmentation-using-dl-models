@@ -2,6 +2,7 @@ from config import *
 from keras.layers import *
 from keras.models import *
 
+
 def get_decoder_model(input, output):
     img_input = input
     o = output

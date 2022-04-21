@@ -24,6 +24,7 @@ from config import *
 from keras_applications import correct_pad
 from keras.layers import *
 from keras.models import *
+from keras.optimizers import Adam
 from keras.utils import get_file
 from keras import backend as K
 

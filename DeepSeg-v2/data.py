@@ -48,7 +48,6 @@ def get_augment_seg(img, seg, n_classes):
 
 def get_pairs_from_paths(images_path, segs_path):
     images = glob.glob(os.path.join(images_path, config['train_modality'][0] + "*.png"))
-
     segmentations = glob.glob(os.path.join(segs_path, "*.png")) 
     ret = []
     for im in images:
