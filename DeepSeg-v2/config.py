@@ -56,15 +56,15 @@ path = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/mri-image-s
 
 ####### These variables should be modified to your local path #######
 # dataset paths
-# config['brats_path'] = '/PATH/TO/MICCAI_BraTS_2019_Data_Training/' # path to the original BraTS 2019
-# config['preprocessed_brats'] = '/PATH/TO/BraTS19_train_preprocessed/' # path to the output preprocessed BraTS 2019 (after preprocess.py)
-# config['preprocessed_brats_imgs'] = '/PATH/TO/BraTS19_train_images/' # path to the output preprocessed 2D images (after preprocess_2d_images.py)
-config['dataset_path'] = path+'DATASET/dataset_brats19/' # path to the dataset containing 2d images (train_images, train_segmentation, ... etc)
+config['brats_path'] = path+'DATASET/MICCAI_BraTS_2021_Data_Training/' # path to the original BraTS 2019
+config['preprocessed_brats'] = path+'DATASET/BraTS21_train_preprocessed/' # path to the output preprocessed BraTS 2019 (after preprocess.py)
+config['preprocessed_brats_imgs'] = path+'DATASET/BraTS21_train_images/' # path to the output preprocessed 2D images (after preprocess_2d_images.py)
+config['dataset_path'] = path+'DATASET/dataset_brats21/' # path to the dataset containing 2d images (train_images, train_segmentation, ... etc)
 #####################################################################
 
 # model configuration
-config['encoder_name'] = 'DenseNet121' # name of the encoder: UNet, UNet-Mod, VGG16, ResNet50, MobileNet, MobileNetV2, Xception, NASNetMobile, DenseNet121
-config['decoder_name'] = 'UNet-Mod' # name of the decoder: UNet, UNet-Mod
+config['encoder_name'] = 'DenseNet121' # name of the encoder: UNet-Mod, VGG16, ResNet50, MobileNet, MobileNetV2, Xception, NASNetMobile, DenseNet121
+config['decoder_name'] = 'UNet-Mod' # name of the decoder: UNet-Mod
 config['project_name'] = config['encoder_name'] + '_' + config['decoder_name']
 
 config['all_modalities'] = ["image_FLAIR/", "image_t1/", "image_t1ce/", "image_t2/"]
@@ -111,12 +111,15 @@ config['output_height'] = 224
 config['output_width'] = 224
 config['epochs'] = 30	# number of training epochs
 config['load_model'] = True # for training --> False ||| For Predictions --> True
-config['load_model_path'] = path+"weights/"+config['project_name']+'/'+config['encoder_name']+"_"+config['decoder_name']+"_e30s45v200.hdf5" # specifiy the loaded model path or None |||  if config['load_model']==False None; else pathofWeight
+config['load_model_path'] = path + "paper_weights/"+config['encoder_name']+"_"+config['decoder_name']+".hdf5" # specifiy the loaded model path or None |||  if config['load_model']==False None; else pathofWeight
 # config['load_model_path'] = None
+# config['load_model_path'] = config['weight_dir'] + config['project_name'] + "/" + config['encoder_name']+"_"+config['decoder_name']+".001-0.00001.hdf5"
 
-config['model_num'] = '30' # load model by the number of training epoch if config['load_model_path'] = None
-config['initial_epoch'] = config['model_num'] if config['load_model'] else 0  # continue training
+config['model_num'] = '35' # load model by the number of training epoch if config['load_model_path'] = None
+config['initial_epoch'] = 0  # continue training config['model_num'] if config['load_model'] else
 config['trainable'] = True # make the top layers of the model trainable or not (for transfer learning)
+
+print(config['initial_epoch'])
 
 config['n_train_images'] = len(glob.glob(config['train_images'] + 'image_FLAIR/*')) # 13779
 config['n_valid_images'] = len(glob.glob(config['val_images'] + 'image_FLAIR/*')) # 3445
@@ -124,7 +127,7 @@ config['n_valid_images'] = len(glob.glob(config['val_images'] + 'image_FLAIR/*')
 # config['steps_per_epoch'] = config['n_train_images'] // config['batch_size'] # 512 for fast testing
 # config['validation_steps'] = config['n_valid_images'] // config['val_batch_size'] # 200 for fast testing
 
-config['steps_per_epoch'] = 45
+config['steps_per_epoch'] = 200
 config['validation_steps'] = 200
 
 # data augmentation parameters
@@ -142,7 +145,10 @@ config['random_order'] = True # apply augmenters in random order
 
 # prediction and evaluation
 config['sample_output'] = True # show a sample output from brats_19
-config['sample_path'] = 'BraTS19_TCIA10_408_1-67'
+# config['sample_path'] = 'Brats18_TCIA08_436_1-76'   #for BraTS18
+# config['sample_path'] = 'BraTS19_TCIA02_151_1-90'   #for BraTS19
+# config['sample_path'] = 'BraTS20_Training_006-75'     #for BraTS20
+config['sample_path'] = 'BraTS2021_01537-75'   #for BraTS21
 config['pred_path'] = path+'preds/' + config['project_name'] + '/'
 config['evaluate_path'] = path+'evaluations/' # + config['project_name'] + '/'
 config['evaluate_val'] = True # evaluate the entire validation set

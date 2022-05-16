@@ -76,10 +76,10 @@ def get_deepseg_model(encoder_name, decoder_name, n_classes, input_height, input
     # Load the saved model
     if load_model:
         if config['load_model_path'] is None:
-            #model.load_weights(glob.glob(os.path.join(config['weight_dir'] + config['project_name'], '*' + config['model_num'] + '*'))[0])
-            model.load_weights(path+"weights/"+config['project_name']+'/'+config['encoder_name']+"_"+config['decoder_name']+".hdf5")
+            model.load_weights(glob.glob(os.path.join(config['weight_dir'] + config['project_name'], '*' + config['model_num'] + '*'))[0])
+            # model.load_weights(path+"weights/"+config['project_name']+'/'+config['encoder_name']+"_"+config['decoder_name']+".hdf5")
             # model.load_weights(path + "paper_weights/" + config['encoder_name'] + "_" + config['decoder_name'] + ".hdf5")
-            print((path + "paper_weights/" + config['encoder_name'] + "_" + config['decoder_name'] + ".hdf5"))
+            # print((path + "paper_weights/" + config['encoder_name'] + "_" + config['decoder_name'] + ".hdf5"))
         else:
             model.load_weights(config['load_model_path'])
             print(config['load_model_path'])

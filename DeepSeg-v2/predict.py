@@ -159,8 +159,17 @@ def main(sample_output=True, predict_val=True, predict_val_nifti=False):
         # sample_lgg_path = 'BraTS19_TCIA09_462_1-70' # LGG 2019 default
         # sample_hgg_path = 'BraTS19_TCIA10_408_1-50' # HGG 2019 default
 
-        sample_hgg_path = 'BraTS19_CBICA_BAP_1-96'  # HGG 2019
-        sample_lgg_path = 'BraTS19_TCIA09_462_1-75' # LGG 2019
+        sample_hgg_path = 'BraTS2021_00043-62'  # Sample 1 2021
+        sample_lgg_path = 'BraTS2021_01537-75'  # Sample 2 2021
+
+        # sample_hgg_path = 'BraTS20_Training_006-75'  # Sample 1 2020
+        # sample_lgg_path = 'BraTS20_Training_327-80'  # Sample 2 2020
+
+        # sample_hgg_path = 'BraTS19_TCIA02_151_1-90'  # HGG 2019
+        # sample_lgg_path = 'BraTS19_TCIA02_455_1-91' # LGG 2019
+
+        # sample_hgg_path = 'BraTS19_CBICA_BAP_1-96'  # HGG 2019
+        # sample_lgg_path = 'BraTS19_TCIA09_462_1-75' # LGG 2019
 
         # sample_lgg_path = 'Brats18_TCIA09_462_1-99'  # LGG 2018
         # sample_hgg_path = 'Brats18_TCIA08_436_1-76'  # HGG 2018
@@ -190,24 +199,30 @@ def main(sample_output=True, predict_val=True, predict_val_nifti=False):
         f = plt.figure()
         # (nrows, ncols, index)
         f.add_subplot(2,3, 1)
-        plt.title('Original HGG image')
-        plt.imshow(orig_hgg_img, cmap='Reds')
+        plt.title('Original Sample 1 image')        #for BraTS 20, 21
+        # plt.title('Original HGG image')           #for BraTS 18, 19
+        plt.imshow(orig_hgg_img, cmap='gray')
         f.add_subplot(2,3, 2)
-        plt.title('Predicted HGG image')
-        plt.imshow(pred_hgg_img, cmap='Reds')
+        plt.title('Predicted Sample 1 image')       #for BraTS 20, 21
+        # plt.title('Predicted HGG image')          #for BraTS 18, 19
+        plt.imshow(pred_hgg_img, cmap='gray')
         f.add_subplot(2,3, 3)
-        plt.title('Truth HGG image')
-        plt.imshow(truth_hgg_img, cmap='Reds')
+        plt.title('Truth Sample 1 image')           #for BraTS 20, 21
+        # plt.title('Truth HGG image')              #for BraTS 18, 19
+        plt.imshow(truth_hgg_img, cmap='gray')
 
         f.add_subplot(2,3, 4)
-        plt.title('Original LGG image')
-        plt.imshow(orig_lgg_img, cmap='Reds')
+        plt.title('Original Sample 2 image')        #for BraTS 20, 21
+        # plt.title('Original LGG image')           #for BraTS 18, 19
+        plt.imshow(orig_lgg_img, cmap='gray')
         f.add_subplot(2,3, 5)
-        plt.title('Predicted LGG image')
-        plt.imshow(pred_lgg_img, cmap='Reds')
+        plt.title('Predicted Sample 2 image')       #for BraTS 20, 21
+        # plt.title('Predicted LGG image')          #for BraTS 18, 19
+        plt.imshow(pred_lgg_img, cmap='gray')
         f.add_subplot(2,3, 6)
-        plt.title('Truth LGG image')
-        plt.imshow(truth_lgg_img, cmap='Reds')
+        plt.title('Truth Sample 2 image')           #for BraTS 20, 21
+        # plt.title('Truth LGG image')              #for BraTS 18, 19
+        plt.imshow(truth_lgg_img, cmap='gray')
         plt.show(block=True)
 
 if __name__ == "__main__":

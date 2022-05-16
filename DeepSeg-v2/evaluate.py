@@ -29,7 +29,7 @@ from predict import *
 from keras import backend as K
 import pandas as pd
 import matplotlib
-matplotlib.use('agg')
+# matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 def get_truth_images(truth_dir='truth/', truth_shape=(3445,224,224)):
@@ -67,7 +67,10 @@ def save_evaluation_csv(pred_path='preds/', truth_path='truth/', evaluate_path='
         rows.append([func(truth_whole, pred_whole)for func in evaluation_functions])
 
     df = pd.DataFrame.from_records(rows, columns=header, index=subject_ids)
-    df.to_csv(evaluate_path+"/brats19_"+config['project_name']+"_scores.csv")
+    # df.to_csv(evaluate_path + "/brats18_" + config['project_name'] + "_scores.csv")         #for BraTS18
+    # df.to_csv(evaluate_path+"/brats19_"+config['project_name']+"_scores.csv")               #for BraTS19
+    # df.to_csv(evaluate_path + "/brats20_" + config['project_name'] + "_scores.csv")           #for BraTS20
+    df.to_csv(evaluate_path + "/brats21_" + config['project_name'] + "_scores.csv")         #for BraTS21
 
     if save_plot:
         scores = dict()
@@ -77,7 +80,10 @@ def save_evaluation_csv(pred_path='preds/', truth_path='truth/', evaluate_path='
 
         plt.boxplot(list(scores.values()), labels=list(scores.keys()))
         plt.ylabel("Evaluation scores")
-        plt.savefig(evaluate_path+"/brats19_"+config['project_name']+"_scores_boxplot.png")
+        # plt.savefig(evaluate_path+"/brats18_"+config['project_name']+"_scores_boxplot.png")             #for BraTS18
+        # plt.savefig(evaluate_path + "/brats19_" + config['project_name'] + "_scores_boxplot.png")       #for BraTS19
+        # plt.savefig(evaluate_path + "/brats20_" + config['project_name'] + "_scores_boxplot.png")       #for BraTS20
+        plt.savefig(evaluate_path + "/brats21_" + config['project_name'] + "_scores_boxplot.png")       #for BraTS21
         plt.close()
 
 def main(evaluate_val=True, evaluate_val_nifti=True, evaluate_keras=False, save_csv=False, sample_output=False):
@@ -134,7 +140,7 @@ def main(evaluate_val=True, evaluate_val_nifti=True, evaluate_keras=False, save_
             prediction_file = config['pred_path_nifti_240'] +'/'+ "%s.nii.gz"%(case_ID)
             prediction_image = nib.load(prediction_file)
             prediction = prediction_image.get_data()
- 
+
             truth_whole = get_whole_tumor_mask(truth)
             #truth_core = get_tumor_core_mask(truth)
             #truth_enhancing = get_enhancing_tumor_mask(truth)
@@ -159,11 +165,11 @@ def main(evaluate_val=True, evaluate_val_nifti=True, evaluate_keras=False, save_
             plt.savefig(config['evaluate_path']+"/brats19_"+config['project_name']+"_scores_nifti_boxplot.png")
             plt.close()
 
-    # evaluate using keras 
+    # evaluate using keras
     if evaluate_keras:
         val_generator = image_segmentation_generator(config['val_images'], config['val_annotations'],  config['val_batch_size'], config['classes'], config['input_height'], config['input_width'], config['output_height'], config['output_width'], do_augment=False, shuffle=False)
 
-        results = unet_2d_model.evaluate_generator(val_generator, steps=config['validation_steps'], verbose=1, max_queue_size=1, workers=1, use_multiprocessing=False) 
+        results = unet_2d_model.evaluate_generator(val_generator, steps=config['validation_steps'], verbose=1, max_queue_size=1, workers=1, use_multiprocessing=False)
         print(results)
 
     # save data to .csv file
@@ -175,7 +181,9 @@ def main(evaluate_val=True, evaluate_val_nifti=True, evaluate_keras=False, save_
     # sample output
     if sample_output:
         sample_path = config['sample_path']
-        print("Evaluating BraTS 19 sample:", sample_path)
+        # print("Evaluating BraTS 19 sample:", sample_path)       #for BraTS19
+        # print("Evaluating BraTS 20 sample:", sample_path)       #for BraTS20
+        print("Evaluating BraTS 21 sample:", sample_path)       #for BraTS21
         orig_path = config['val_images']+config['train_modality'][0]+sample_path +'.png' # T1 image
         truth_path = config['val_annotations']+sample_path+'.png'
         pred_path = "out_test_file/"+sample_path+"_pred.png"
@@ -213,7 +221,7 @@ def main(evaluate_val=True, evaluate_val_nifti=True, evaluate_keras=False, save_
         plt.imshow(pred_img)
         f.add_subplot(1,3, 3)
         plt.title('Ground truth image')
-        plt.imshow(truth_img)
+        plt.imshow(truth_img, cmap='gray')
         plt.show(block=True)
 
 if __name__ == "__main__":
