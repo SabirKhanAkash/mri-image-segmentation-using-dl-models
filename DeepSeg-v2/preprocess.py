@@ -81,8 +81,8 @@ def preprocess_brats_folder(in_folder, out_folder, truth_name='seg', no_bias_cor
     check_origin(out_path, get_image_path(in_folder, config["modalities"][0])) # check with the flair image
 
 def preprocess_brats_data(brats_folder, out_folder, overwrite=False, no_bias_correction_modalities=("flair")):
-    # for subject_folder in glob.glob(os.path.join(brats_folder, "*")): for BraTS 2021 Dataset
-    for subject_folder in glob.glob(os.path.join(brats_folder, "*", "*")):  #for BraTS 2018,2019,2020 Datasets
+    for subject_folder in glob.glob(os.path.join(brats_folder, "*")): #for BraTS 2021 Dataset
+    # for subject_folder in glob.glob(os.path.join(brats_folder, "*", "*")):  #for BraTS 2018,2019,2020 Datasets
         if os.path.isdir(subject_folder):
             subject = os.path.basename(subject_folder)
             new_subject_folder = os.path.join(out_folder, os.path.basename(os.path.dirname(subject_folder)),
