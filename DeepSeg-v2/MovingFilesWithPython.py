@@ -1,12 +1,12 @@
 import os, shutil
 
 
-dir1 = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/DeepSeg/DATASET/BraTS18_train_preprocessed/HGG/'
-dirFlair = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/DeepSeg/DATASET/BraTS18_train_preprocessed/image_flair/'
-dirT1 = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/DeepSeg/DATASET/BraTS18_train_preprocessed/image_t1/'
-dirT2 = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/DeepSeg/DATASET/BraTS18_train_preprocessed/image_t2/'
-dirT1ce = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/DeepSeg/DATASET/BraTS18_train_preprocessed/image_t1ce/'
-dirTruth = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/DeepSeg/DATASET/BraTS18_train_preprocessed/truth/'
+dir1 = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/mri-image-segmentation-using-dl-models/DeepSeg-v2/DATASET/BraTS21_train_preprocessed/MICCAI_BraTS_2021_Data_Training/'
+dirFlair = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/mri-image-segmentation-using-dl-models/DeepSeg-v2/DATASET/BraTS21_train_preprocessed/image_flair/'
+dirT1 = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/mri-image-segmentation-using-dl-models/DeepSeg-v2/DATASET/BraTS21_train_preprocessed/image_t1/'
+dirT2 = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/mri-image-segmentation-using-dl-models/DeepSeg-v2/DATASET/BraTS21_train_preprocessed/image_t2/'
+dirT1ce = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/mri-image-segmentation-using-dl-models/DeepSeg-v2/DATASET/BraTS21_train_preprocessed/image_t1ce/'
+dirTruth = 'D:/Study Materials/Study/4th Year/7th Semester/CSE 4000/Code/mri-image-segmentation-using-dl-models/DeepSeg-v2/DATASET/BraTS21_train_preprocessed/truth/'
 
 
 fileformatFlair = 'flair'

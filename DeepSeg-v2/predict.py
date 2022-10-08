@@ -100,14 +100,14 @@ def main(sample_output=True, predict_val=True, predict_val_nifti=False):
             load_model=config['load_model'])
 
     # get predictions of all images in the validation directory
-    if predict_val:
-        predict_multiple(
-            unet_2d_model,
-            inp_dir = config['val_images']+config['train_modality'][0],
-            out_dir = config['pred_path'],
-            train_modalities = config['train_modality'],
-            overwrite = False
-        )
+    # if predict_val:
+    #     predict_multiple(
+    #         unet_2d_model,
+    #         inp_dir = config['val_images']+config['train_modality'][0],
+    #         out_dir = config['pred_path'],
+    #         train_modalities = config['train_modality'],
+    #         overwrite = False
+    #     )
 
     # get predictions of all images in the validation directory as nifti
     if predict_val_nifti:
@@ -159,11 +159,11 @@ def main(sample_output=True, predict_val=True, predict_val_nifti=False):
         # sample_lgg_path = 'BraTS19_TCIA09_462_1-70' # LGG 2019 default
         # sample_hgg_path = 'BraTS19_TCIA10_408_1-50' # HGG 2019 default
 
-        sample_hgg_path = 'BraTS2021_00043-62'  # Sample 1 2021
-        sample_lgg_path = 'BraTS2021_01537-75'  # Sample 2 2021
+        # sample_hgg_path = 'BraTS2021_00043-62'  # Sample 1 2021
+        # sample_lgg_path = 'BraTS2021_01537-75'  # Sample 2 2021
 
-        # sample_hgg_path = 'BraTS20_Training_006-75'  # Sample 1 2020
-        # sample_lgg_path = 'BraTS20_Training_327-80'  # Sample 2 2020
+        sample_hgg_path = 'BraTS20_Training_006-75'  # Sample 1 2020
+        sample_lgg_path = 'BraTS20_Training_327-80'  # Sample 2 2020
 
         # sample_hgg_path = 'BraTS19_TCIA02_151_1-90'  # HGG 2019
         # sample_lgg_path = 'BraTS19_TCIA02_455_1-91' # LGG 2019

@@ -39,6 +39,9 @@ image_modality = 'image_FLAIR'
 IMG_ROOT = config['preprocessed_brats']+config['train_modality']
 IMG_OUTPUT_ROOT = config['preprocessed_brats_imgs']+config['train_modality']
 
+print(IMG_ROOT)
+print(IMG_OUTPUT_ROOT)
+
 # Validation
 #IMG_ROOT = config['preprocessed_brats_val']+config['train_modality']
 #IMG_OUTPUT_ROOT = config['preprocessed_brats_val_imgs']+config['train_modality']

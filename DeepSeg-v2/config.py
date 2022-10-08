@@ -68,7 +68,7 @@ config['decoder_name'] = 'UNet-Mod' # name of the decoder: UNet-Mod
 config['project_name'] = config['encoder_name'] + '_' + config['decoder_name']
 
 config['all_modalities'] = ["image_FLAIR/", "image_t1/", "image_t1ce/", "image_t2/"]
-config['train_modality'] = ["image_FLAIR/"]
+config['train_modality'] = "image_FLAIR/"
 config['n_modalities'] = len(config['train_modality'])
 config['label_type'] = '' # _complete, _core, _enhancing, _l1, _l2, _l3
 config['train_label'] = 'truth/' + config['label_type']
@@ -99,7 +99,7 @@ config['tensorboard_path'] = path+'logs_tensor_board/' + config['project_name']
 config['batch_size'] = 16
 config['val_batch_size'] = 16
 config['filter_size'] = 32 # number of basic filters
-config['optimizer_lr'] = 1e-4
+config['optimizer_lr'] = 1e-3
 config['optimizer_name'] = adam_v2.Adam(config['optimizer_lr'])
 config['weights_arr'] = np.array([0.05, 1.0]) # 2 Classes
 #####################################################################
@@ -110,12 +110,12 @@ config['input_width'] = 224
 config['output_height'] = 224
 config['output_width'] = 224
 config['epochs'] = 30	# number of training epochs
-config['load_model'] = True # for training --> False ||| For Predictions --> True
+config['load_model'] = False # for training --> False ||| For Predictions --> True
 config['load_model_path'] = path + "paper_weights/"+config['encoder_name']+"_"+config['decoder_name']+".hdf5" # specifiy the loaded model path or None |||  if config['load_model']==False None; else pathofWeight
 # config['load_model_path'] = None
 # config['load_model_path'] = config['weight_dir'] + config['project_name'] + "/" + config['encoder_name']+"_"+config['decoder_name']+".001-0.00001.hdf5"
 
-config['model_num'] = '35' # load model by the number of training epoch if config['load_model_path'] = None
+config['model_num'] = '30' # load model by the number of training epoch if config['load_model_path'] = None
 config['initial_epoch'] = 0  # continue training config['model_num'] if config['load_model'] else
 config['trainable'] = True # make the top layers of the model trainable or not (for transfer learning)
 
@@ -179,7 +179,7 @@ if not os.path.exists(config['pred_path_nifti_240']):
 # print configs
 print("\n\n####################################################################")
 print("Please cite the following paper when using DeepSeg :")
-print("Zeineldin, Ramy Ashraf, et al. \"DeepSeg: Deep Neural Network Framework for Automatic Brain Tumor Segmentation using Magnetic Resonance FLAIR Images. (2020).\n\n")
+print("Zeineldin, Ramy Ashraf, et al. \"DeepSeg: Deep Neural Network Framework for Automatic Brain Tumor Segmentation using Magnetic Resonance FLAIR Images. (2020)\".\n\n")
 
 print("Project name is:", config['project_name'])
 print("Dataset path:", config['dataset_path'])
